@@ -90,7 +90,8 @@ int main() //  polymorphism in Action - polymorphism ONLY works with POINTERS (o
 //    shapes.push_back( unique_ptr<Shape> (new Circle(1, 3, 5)));
 //    shapes.push_back( unique_ptr<Shape> (new Rectangle(8, 6, 20, 25)));
 
-    for (unique_ptr<Shape>& shapePtr : shapes)      // must use reference so as not to copy
+//      (const unique_ptr<Shape>& shapePtr : shapes)
+    for (const auto& shapePtr : shapes)      // must use reference so as not to copy unique_ptr
     {
         // use the smart pointer just as we use raw pointer
         shapePtr->draw();		// polymorphic behaviour, uses dynamic binding
