@@ -116,8 +116,8 @@ void fillShapesVector(vector<unique_ptr<Shape>>& vectorRef)  // reference to a v
     // Pass it immediately into a unique_ptr constructor.
     // The unique_ptr is created on the stack (so it is an automatic variable)
     // Add the unique pointer to the vector.
-    vectorRef.push_back( unique_ptr<Shape> (new Circle(1, 3, 5)));
-    vectorRef.push_back( unique_ptr<Shape> (new Rectangle(8, 6, 20, 25)));
+    vectorRef.push_back( unique_ptr<Shape>( new Circle(1, 3, 5) ));
+    vectorRef.push_back( unique_ptr<Shape>( new Rectangle(8, 6, 20, 25) ));
 
     // etc.. shapes could be read from a file
 }
