@@ -1,15 +1,21 @@
 // 		Vector of Smart Pointers (unique_ptr)		March 2023
-
-// This sample is based on the inheritance-abstract-base-class-shape sample.
-// The changes are only in the main.cpp file.
 //
-// It uses a vector of SMART POINTERS (unique_ptr type) to point at Shape objects
-// and therefore there is  no need for the programmer to remember to delete
-// the memory allocated from the heap as the smart pointer looks after that
+// https://learn.microsoft.com/en-us/cpp/cpp/smart-pointers-modern-cpp?view=msvc-170
+// Smart pointers are defined in the std namespace in the <memory> header file.
+
+// This sample is based on the "inheritance-abstract-base-class-shape" sample and
+// all changes were made only in the main.cpp file.
+//
+// This uses a vector of SMART POINTERS (unique_ptr type) to point at Shape objects
+// and therefore there is no need for the programmer to remember to delete
+// the memory allocated from the heap, as the smart pointer looks after that
 // aspect automatically (When the smart pointer's life ends, then a call is made
 // to delete the object that the smart pointer is pointing at))
 // Programmers are far less likely to have memory leaks in their code when
-// using smart pointers. 
+// using smart pointers.
+//
+// A unique_ptr can not be copied or assigned, so we use references to the
+// unique pointers to access them.
 //
 // As before ......
 // Virtual functions are member functions whose behavior can be overridden in derived classes.
@@ -75,7 +81,7 @@ int main() //  polymorphism in Action - polymorphism ONLY works with POINTERS (o
     //https://learn.microsoft.com/en-us/cpp/cpp/smart-pointers-modern-cpp?view=msvc-170
     // Smart pointers are defined in the std namespace in the <memory> header file.
 
-    // Vector of SMART pointers to Shape objects.
+    // Vector of unique_ptr (SMART POINTERS) to Shape objects.
     // unique_ptr is a type of smart pointer.
     vector<unique_ptr<Shape>> shapes;
 
@@ -89,15 +95,25 @@ int main() //  polymorphism in Action - polymorphism ONLY works with POINTERS (o
         // use the smart pointer just as we use raw pointer
         shapePtr->draw();		// polymorphic behaviour, uses dynamic binding
     }
-    // No longer any need to delete the shape objects that were pointed at by vector elements.
+    // No longer any need to explicitly delete the shape objects that were pointed at by vector elements.
+
+    cout << "About to clear the contents of the vector. This will free the vector elements "
+            << "from the stack, and their life will end. Just before the elements are destroyed, "
+            << "a destructor is called that deletes the memory pointed to by the unique_ptr. "
+            << "We see below that the destructors for the Circle and Rectangle are called. "
+            << "Thus, the memory is deleted automatically for us, and we don't have to worry about "
+            << "forgetting to free that memory.  This idiom is known as RAII" << endl;
 
     shapes.clear(); // clear the contents of the vector as the objects they point to have been freed.
+
+    cout<< "At end of main()" << endl;
 }
 
 void fillShapesVector(vector<unique_ptr<Shape>>& vectorRef)  // reference to a vector
 {
     // Dynamically allocate a Circle object.
-    // Pass it immediately into unique_ptr constructor
+    // Pass it immediately into a unique_ptr constructor.
+    // The unique_ptr is created on the stack (so it is an automatic variable)
     // Add the unique pointer to the vector.
     vectorRef.push_back( unique_ptr<Shape> (new Circle(1, 3, 5)));
     vectorRef.push_back( unique_ptr<Shape> (new Rectangle(8, 6, 20, 25)));
