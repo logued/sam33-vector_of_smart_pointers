@@ -82,9 +82,10 @@ int main() //  polymorphism in Action - polymorphism ONLY works with POINTERS (o
     // Smart pointers are defined in the std namespace in the <memory> header file.
 
     // Vector of unique_ptr (SMART POINTERS) to Shape objects.
-    // unique_ptr is a type of smart pointer.
+    // unique_ptr is a type of smart pointer.  Only one unique pointer pointing at any particular object at a time.
     vector<unique_ptr<Shape>> shapes;
 
+    // Initialize the vector with some shapes (use reference parameter)
     fillShapesVector(shapes);
 
 //    shapes.push_back( unique_ptr<Shape> (new Circle(1, 3, 5)));
@@ -96,26 +97,28 @@ int main() //  polymorphism in Action - polymorphism ONLY works with POINTERS (o
         // use the smart pointer just as we use raw pointer
         shapePtr->draw();		// polymorphic behaviour, uses dynamic binding
     }
-    // No longer any need to explicitly delete the shape objects that were pointed at by vector elements.
+
 
     cout << "About to clear the contents of the vector. This will free the vector elements "
-            << "from the stack, and their life will end. Just before the elements are destroyed, "
+            << "and their life will end. Just before the elements in the vector are destroyed, "
             << "a destructor is called that deletes the memory pointed to by the unique_ptr. "
-            << "We see below that the destructors for the Circle and Rectangle are called. "
+            << "We see in the output below that the destructors for each Circle and Rectangle are called. "
             << "Thus, the memory is deleted automatically for us, and we don't have to worry about "
             << "forgetting to free that memory.  This idiom is known as RAII" << endl;
 
-    shapes.clear(); // clear the contents of the vector as the objects they point to have been freed.
+
+    shapes.clear(); // clear the contents of the vector.  As they are unique_pointers, they will call delete for each shape object.
 
     cout<< "At end of main()" << endl;
 }
 
 void fillShapesVector(vector<unique_ptr<Shape>>& vectorRef)  // reference to a vector
 {
-    // Dynamically allocate a Circle object.
-    // Pass it immediately into a unique_ptr constructor.
-    // The unique_ptr is created on the stack (so it is an automatic variable)
-    // Add the unique pointer to the vector.
+    // Dynamically allocate a Circle (or Rectangle) object.
+    // Pass it immediately into a unique_ptr constructor. (Wrap the raw pointer in a unique_ptr)
+    // The unique_ptr is added into the vector as an element.
+    // ( So, the elements of the vector are unique_ptr types.
+    //
     vectorRef.push_back( unique_ptr<Shape>( new Circle(1, 3, 5) ));
     vectorRef.push_back( unique_ptr<Shape>( new Rectangle(8, 6, 20, 25) ));
 
