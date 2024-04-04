@@ -109,7 +109,7 @@ int main() //  polymorphism in Action - polymorphism ONLY works with POINTERS (o
 
     shapes.clear(); // clear the contents of the vector.  As they are unique_pointers, they will call delete for each shape object.
 
-    cout<< "At end of main()" << endl;
+    cout<< "At end of main().  Study the output carefully - especially the destructor messages." << endl;
 }
 
 void fillShapesVector(vector<unique_ptr<Shape>>& vectorRef)  // reference to a vector
